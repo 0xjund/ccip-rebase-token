@@ -41,6 +41,7 @@ contract Vault{
         }
         // Follow CEI!
 
+
         // Burn the tokens
         i_rebaseToken.burn(msg.sender, _amount);
         // Send the user ETH
@@ -59,5 +60,4 @@ contract Vault{
     function getRebaseTokenAddress() external view returns (address) {
         return address (i_rebaseToken);
     }
-
 }
