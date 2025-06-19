@@ -4,8 +4,7 @@ pragma solidity 0.8.24;
 
 import {IRebaseToken} from "./Interfaces/IRebaseToken.sol";
 
-contract Vault{
-
+contract Vault {
     IRebaseToken private immutable i_rebaseToken;
 
     event Deposit(address indexed user, uint256 amount);
@@ -38,10 +37,9 @@ contract Vault{
 
     function redeem(uint256 _amount) external {
         if (_amount == type(uint256).max) {
-           _amount =  i_rebaseToken.balanceOf(msg.sender);
+            _amount = i_rebaseToken.balanceOf(msg.sender);
         }
         // Follow CEI!
-
 
         // Burn the tokens
         i_rebaseToken.burn(msg.sender, _amount);
@@ -59,6 +57,6 @@ contract Vault{
      */
 
     function getRebaseTokenAddress() external view returns (address) {
-        return address (i_rebaseToken);
+        return address(i_rebaseToken);
     }
 }

@@ -22,7 +22,7 @@ contract TestRebaseToken is Test {
         rebaseToken = new RebaseToken();
         vault = new Vault(IRebaseToken(address(rebaseToken)));
         rebaseToken.grantMintAndBurnRole(address(vault));
-        (bool success,) = payable(address(vault)).call{value:1e18}("");
+        (bool success,) = payable(address(vault)).call{value: 1e18}("");
         vm.stopPrank();
     }
 
@@ -123,7 +123,6 @@ contract TestRebaseToken is Test {
         // check the user interest rate has been inherited 5e10 not 4e10
         assertEq(rebaseToken.getUserInterestRate(user), 5e10);
         assertEq(rebaseToken.getUserInterestRate(user2), 5e10);
-
     }
 
     function testCannotSetInterestRate(uint256 newInterestRate) public {
@@ -142,14 +141,14 @@ contract TestRebaseToken is Test {
     }
 
     function testGetPrincipleAmount(uint256 amount) public {
-      amount = bound(amount, 1e5, type(uint96).max);
-      vm.deal(user, amount);
-      vm.prank(user);
-      vault.deposit{value: amount}();
-      assertEq(rebaseToken.principleBalanceOf(user), amount);
+        amount = bound(amount, 1e5, type(uint96).max);
+        vm.deal(user, amount);
+        vm.prank(user);
+        vault.deposit{value: amount}();
+        assertEq(rebaseToken.principleBalanceOf(user), amount);
 
-      vm.warp(block.timestamp + 1 hours);
-      assertEq(rebaseToken.principleBalanceOf(user), amount);
+        vm.warp(block.timestamp + 1 hours);
+        assertEq(rebaseToken.principleBalanceOf(user), amount);
     }
 
     function testGetRebaseTokenAddress() public view {
@@ -157,13 +156,11 @@ contract TestRebaseToken is Test {
     }
 
     function testInterestRateCanOnlyDecrease(uint256 newInterestRate) public {
-       uint256 initialInterestRate = rebaseToken.getInterestRate();
-       newInterestRate = bound(newInterestRate, initialInterestRate, type(uint96).max);
-       vm.prank(owner);
-       vm.expectPartialRevert(bytes4(RebaseToken.RebaseToken__InterestRateCanOnlyDecrease.selector));
-       rebaseToken.setInterestRate(newInterestRate);
-       assertEq(rebaseToken.getInterestRate(), initialInterestRate);
+        uint256 initialInterestRate = rebaseToken.getInterestRate();
+        newInterestRate = bound(newInterestRate, initialInterestRate, type(uint96).max);
+        vm.prank(owner);
+        vm.expectPartialRevert(bytes4(RebaseToken.RebaseToken__InterestRateCanOnlyDecrease.selector));
+        rebaseToken.setInterestRate(newInterestRate);
+        assertEq(rebaseToken.getInterestRate(), initialInterestRate);
     }
-
-
 }
